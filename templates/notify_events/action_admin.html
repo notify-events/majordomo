@@ -1,0 +1,34 @@
+<style>
+    .ne-tab-pane {
+        border: 1px solid #ddd;
+        border-top: 0;
+        border-radius: 0 0 5px 5px;
+        padding: 15px;
+    }
+    .ne-tab-pane > :last-child {
+        margin-bottom: 0;
+    }
+</style>
+
+<h1>
+    <img src="/img/modules/notify_events.png" alt="Notify.Events" style="margin-top: -10px;" />Notify.Events
+</h1>
+
+[#if ALERT#]
+    <div class="alert alert-[#ALERT_TYPE#]">
+        [#ALERT#]
+    </div>
+[#endif#]
+
+<ul class="nav nav-tabs">
+    <li [#if VIEW_MODE="" #] class="active" [#endif#]><a href="?"><span class="glyphicon glyphicon-cog"></span> <#LANG_NE_TAB_SETTINGS#></a></li>
+    <li [#if VIEW_MODE="test" #] class="active" [#endif#]><a href="?view_mode=test"><span class="glyphicon glyphicon-flash"></span> <#LANG_NE_TAB_TEST#></a></li>
+    <li [#if VIEW_MODE="help" #] class="active" [#endif#]><a href="?view_mode=help"><span class="glyphicon glyphicon glyphicon-question-sign"></span> <#LANG_NE_TAB_HELP#></a></li>
+</ul>
+<div class="tab-content">
+    <div class="ne-tab-pane">
+        [#if VIEW_MODE=""#][#inc action_admin_settings.html#][#endif VIEW_MODE#]
+        [#if VIEW_MODE="test"#][#inc action_admin_test.html#][#endif VIEW_MODE#]
+        [#if VIEW_MODE="help"#][#inc action_admin_help.html#][#endif VIEW_MODE#]
+    </div>
+</div>

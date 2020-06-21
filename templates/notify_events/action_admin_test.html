@@ -1,0 +1,12 @@
+<form action="?" method="post" enctype="multipart/form-data" name="frmTest">
+    <div class="form-group">
+        <label class="control-label"[#if ERR_MESSAGE#] style="color:red;font-weight:bold"[#endif#]>
+            <#LANG_NE_MESSAGE#>:
+        </label>
+        <textarea name="message" class="form-control" minlength="1" maxlength="2048" required>[#MESSAGE#]</textarea>
+    </div>
+    <div class="form-actions">
+        <button type="submit" name="ne_action" value="test" class="btn btn-primary"><#LANG_NE_ACTION_SEND#></button>
+        <input type="hidden" name="view_mode" value="test">
+    </div>
+</form>
