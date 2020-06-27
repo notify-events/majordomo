@@ -1,5 +1,16 @@
 <script>
     $(document).ready(() => {
+        let $event_say_enabled       = $('input[name=event_say_enabled]');
+        let $event_say_enabled_block = $('.event_say_enabled_block');
+
+        $event_say_enabled.change(() => {
+            if ($event_say_enabled.is(':checked')) {
+                $event_say_enabled_block.addClass('active');
+            } else {
+                $event_say_enabled_block.removeClass('active');
+            }
+        });
+
         let $level_enabled       = $('input[name=level_enabled]');
         let $level_enabled_block = $('.level_enabled_block');
 
@@ -16,9 +27,11 @@
     .vcenter {
         vertical-align: middle !important;
     }
+    .event_say_enabled_block,
     .level_enabled_block {
         display: none;
     }
+    .event_say_enabled_block.active,
     .level_enabled_block.active {
         display: block;
     }
@@ -32,6 +45,11 @@
         <input type="text" name="token" value="[#TOKEN#]" minlength="32" maxlength="32" required class="form-control">
     </div>
     <div class="form-group">
+        <label class="control-label">
+            <input type="checkbox" name="event_say_enabled" [#if EVENT_SAY_ENABLED="1"#]checked[#endif#]> <#LANG_NE_EVENT_SAY_ENABLED#>
+        </label>
+    </div>
+    <div class="form-group event_say_enabled_block [#if EVENT_SAY_ENABLED="1"#]active[#endif#]">
         <label class="control-label">
             <input type="checkbox" name="level_enabled" [#if LEVEL_ENABLED="1"#]checked[#endif#]> <#LANG_NE_LEVEL_ENABLED#>
         </label>

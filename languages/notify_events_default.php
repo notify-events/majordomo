@@ -92,6 +92,7 @@ $dictionary = [
 
     // Settings
     'NE_TOKEN'              => 'Token',
+    'NE_EVENT_SAY_ENABLED'  => 'SAY event subscription',
     'NE_LEVEL_ENABLED'      => 'Message priority support',
     'NE_LEVEL_ENABLED_HELP' => '<p style="margin-bottom: 5px">Notify.Events allows you to use the message <b>priority</b> as a filter to determine the recipients of this message on it\'s side.'
         . '<br>To use this functionality, at first you need to define dependency of MajorDoMo message <b>level</b> to Notify.Events message <b>priority</b>, using the form below.</p>'

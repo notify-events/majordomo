@@ -1,7 +1,7 @@
 <?php 
 
-require_once(DIR_MODULES . '/notify_events/notify_events.class.php');
-require_once(DIR_MODULES . '/notify_events/lib/Message.php');
+include_once(DIR_MODULES . '/notify_events/notify_events.class.php');
+include_once(DIR_MODULES . '/notify_events/lib/Message.php');
 
 use notify_events\Message;
 

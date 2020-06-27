@@ -161,16 +161,23 @@ class notify_events extends module
         $this->getConfig();
 
         if ($ne_action == 'settings') {
-            global $token, $level_enabled, $level_high, $level_normal, $level_low, $level_lowest;
+            global $token, $event_say_enabled, $level_enabled, $level_high, $level_normal, $level_low, $level_lowest;
 
-            $this->config['TOKEN']         = $token;
+            $this->config['TOKEN'] = $token;
 
-            $this->config['LEVEL_ENABLED'] = (int)($level_enabled == 'on');
+            $this->config['EVENT_SAY_ENABLED'] = (int)($event_say_enabled == 'on');
+            $this->config['LEVEL_ENABLED']     = (int)($level_enabled == 'on');
 
             $this->config['LEVEL_HIGH']   = (int)$level_high;
             $this->config['LEVEL_NORMAL'] = (int)$level_normal;
             $this->config['LEVEL_LOW']    = (int)$level_low;
             $this->config['LEVEL_LOWEST'] = (int)$level_lowest;
+
+            if ($this->config['EVENT_SAY_ENABLED']) {
+                subscribeToEvent($this->name, 'SAY');
+            } else {
+                unsubscribeFromEvent($this->name, 'SAY');
+            }
 
             $this->saveConfig();
             $this->alert('success', LANG_NE_ALERT_SAVE_SUCCESSFULLY);
@@ -192,7 +199,8 @@ class notify_events extends module
 
         $out['TOKEN']         = $this->config['TOKEN'];
 
-        $out['LEVEL_ENABLED'] = $this->config['LEVEL_ENABLED'] ?: 0;
+        $out['EVENT_SAY_ENABLED'] = $this->config['EVENT_SAY_ENABLED'] ?: 1;
+        $out['LEVEL_ENABLED']     = $this->config['LEVEL_ENABLED'] ?: 0;
 
         $out['LEVEL_HIGH']   = $this->config['LEVEL_HIGH']   ?: 0;
         $out['LEVEL_NORMAL'] = $this->config['LEVEL_NORMAL'] ?: 0;
@@ -224,7 +232,7 @@ class notify_events extends module
     {
         $this->getConfig();
 
-        if (($event != 'SAY') || $this->config['DISABLED']) {
+        if (($event != 'SAY') || !$this->config['EVENT_SAY_ENABLED']) {
             return;
         }
 
@@ -260,9 +268,12 @@ class notify_events extends module
      */
     function install($parent_name = "")
     {
+        parent::install($parent_name);
+
         subscribeToEvent($this->name, 'SAY');
 
-        parent::install($parent_name);
+        $this->config['EVENT_SAY_ENABLED'] = 1;
+        $this->saveConfig();
     }
 
     function uninstall()
