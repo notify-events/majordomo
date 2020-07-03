@@ -197,10 +197,10 @@ class notify_events extends module
             return;
         }
 
-        $out['TOKEN']         = $this->config['TOKEN'];
+        $out['TOKEN'] = $this->config['TOKEN'];
 
-        $out['EVENT_SAY_ENABLED'] = $this->config['EVENT_SAY_ENABLED'] ?: 1;
-        $out['LEVEL_ENABLED']     = $this->config['LEVEL_ENABLED'] ?: 0;
+        $out['EVENT_SAY_ENABLED'] = array_key_exists('EVENT_SAY_ENABLED', $this->config) ? $this->config['EVENT_SAY_ENABLED'] : 1;
+        $out['LEVEL_ENABLED']     = array_key_exists('LEVEL_ENABLED', $this->config)     ? $this->config['LEVEL_ENABLED']     : 0;
 
         $out['LEVEL_HIGH']   = $this->config['LEVEL_HIGH']   ?: 0;
         $out['LEVEL_NORMAL'] = $this->config['LEVEL_NORMAL'] ?: 0;
