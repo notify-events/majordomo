@@ -270,9 +270,14 @@ class notify_events extends module
     {
         parent::install($parent_name);
 
-        subscribeToEvent($this->name, 'SAY');
+        $this->getConfig();
 
-        $this->config['EVENT_SAY_ENABLED'] = 1;
+        $this->config['EVENT_SAY_ENABLED'] = array_key_exists('EVENT_SAY_ENABLED', $this->config) ? $this->config['EVENT_SAY_ENABLED'] : 1;
+
+        if ($this->config['EVENT_SAY_ENABLED']) {
+            subscribeToEvent($this->name, 'SAY');
+        }
+
         $this->saveConfig();
     }
 
