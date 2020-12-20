@@ -94,15 +94,12 @@ $dictionary = [
     'NE_TOKEN'              => 'Token',
     'NE_EVENT_SAY_ENABLED'  => 'SAY event subscription',
     'NE_LEVEL_ENABLED'      => 'Message priority support',
-    'NE_LEVEL_ENABLED_HELP' => '<p style="margin-bottom: 5px">Notify.Events allows you to use the message <b>priority</b> as a filter to determine the recipients of this message on it\'s side.'
-        . '<br>To use this functionality, at first you need to define dependency of MajorDoMo message <b>level</b> to Notify.Events message <b>priority</b>, using the form below.</p>'
-        . '<ul style="margin-bottom: 5px; padding-left: 25px;">'
-        . '<li>The leftmost <b>level</b> value (0) - the highest <b>priority</b>.</li>'
-        . '<li>The rightmost <b>level</b> value (equivalent to the value of the minMsgLevel variable) - the lowest <b>priority</b>.</li>'
-        . '</ul>'
-        . '<p>Set the level ranges according to your vision so that they correspond to the priorities you need.'
-        . '<br>For example: Critical priority might be from 0 to 2 (0 <= N < 2), high priority - from 2 to 4 (2 <= N < 4) etc.</p>',
-    'NE_LEVEL'              => 'Level',
+    'NE_LEVEL_ENABLED_HELP' => '<p style="margin-bottom: 5px">Notify.Events allows you to use the message <b>priority</b> as a filter to determine the recipients of this message on it\'s side.</p>'
+        . '<p>To use this functionality, at first you need to define dependency of MajorDoMo message <b>level</b> to Notify.Events message <b>priority</b>, using the form below.'
+        . '<br>For example: "Lowest" priority might be from 0 to 2 (0 &leq; N &lt; 2), "Low" priority - from 2 to 4 (2 &leq; N &lt; 4) etc.</br>'
+        . '<p>If "Level From" is equal to "Level To" that means this priority won\'t be used.</p>',
+    'NE_LEVEL_FROM'         => 'Level From',
+    'NE_LEVEL_TO'           => 'Level To',
     'NE_PRIORITY'           => 'Priority',
     'NE_PRIORITY_LOWEST'    => 'Lowest',
     'NE_PRIORITY_LOW'       => 'Low',

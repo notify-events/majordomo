@@ -21,6 +21,15 @@
                 $level_enabled_block.removeClass('active');
             }
         });
+
+        let $level_control = $('.level-control');
+
+        $level_control.on('change keyup mouseup blur', (event) => {
+            let value      = $(event.currentTarget).val();
+            let event_name = $(event.currentTarget).attr('name')
+
+            $level_control.filter('[name=' + event_name + ']').val(value);
+        });
     });
 </script>
 <style>
@@ -38,66 +47,108 @@
 </style>
 
 <form action="?" method="post" enctype="multipart/form-data" name="frmEdit">
+
     <div class="form-group">
         <label class="control-label"[#if ERR_TOKEN#] style="color:red;font-weight:bold"[#endif#]>
             <#LANG_NE_TOKEN#>:
         </label>
         <input type="text" name="token" value="[#TOKEN#]" minlength="32" maxlength="32" required class="form-control">
     </div>
+
     <div class="form-group">
         <label class="control-label">
             <input type="checkbox" name="event_say_enabled" [#if EVENT_SAY_ENABLED="1"#]checked[#endif#]> <#LANG_NE_EVENT_SAY_ENABLED#>
         </label>
     </div>
+
     <div class="form-group event_say_enabled_block [#if EVENT_SAY_ENABLED="1"#]active[#endif#]">
         <label class="control-label">
             <input type="checkbox" name="level_enabled" [#if LEVEL_ENABLED="1"#]checked[#endif#]> <#LANG_NE_LEVEL_ENABLED#>
         </label>
+
         <div class="level_enabled_block [#if LEVEL_ENABLED="1"#]active[#endif#]">
             <div class="help-block">
                 <#LANG_NE_LEVEL_ENABLED_HELP#>
             </div>
-            <table class="table table-bordered text-center">
+
+            <table class="table table-bordered text-center" style="width: 500px;">
                 <tr>
-                    <th width="15%" class="vcenter"><#LANG_NE_LEVEL#></th>
-                    <td width="10%" colspan="2">
-                        <input type="number" value="0" class="form-control input-sm" readonly>
+                    <th colspan="2"><#LANG_NE_LEVEL_FROM#></th>
+                    <th><#LANG_NE_PRIORITY#></th>
+                    <th colspan="2"><#LANG_NE_LEVEL_TO#></th>
+                </tr>
+                <tr>
+                    <td width="25%">
+                        <input type="number" value="0" class="form-control" readonly>
                     </td>
-                    <td width="5%" class="vcenter"><</td>
-                    <td width="10%" colspan="2">
-                        <input type="number" name="level_high" value="[#LEVEL_HIGH#]" min="0" max="[#LEVEL_MAX_VALUE#]" step="1" class="form-control input-sm">
+                    <td width="10%" class="vcenter">&leq;</td>
+                    <td class="vcenter">
+                        <span class="label label-default"><#LANG_NE_PRIORITY_LOWEST#></span>
                     </td>
-                    <td width="5%" class="vcenter"><</td>
-                    <td width="10%" colspan="2">
-                        <input type="number" name="level_normal" value="[#LEVEL_NORMAL#]" min="0" max="[#LEVEL_MAX_VALUE#]" step="1" class="form-control input-sm">
-                    </td>
-                    <td width="5%" class="vcenter"><</td>
-                    <td width="10%" colspan="2">
-                        <input type="number" name="level_low" value="[#LEVEL_LOW#]" min="0" max="[#LEVEL_MAX_VALUE#]" step="1" class="form-control input-sm">
-                    </td>
-                    <td width="5%" class="vcenter"><</td>
-                    <td width="10%" colspan="2">
-                        <input type="number" name="level_lowest" value="[#LEVEL_LOWEST#]" min="0" max="[#LEVEL_MAX_VALUE#]" step="1" class="form-control input-sm">
-                    </td>
-                    <td width="5%" class="vcenter"><</td>
-                    <td width="10%" colspan="2">
-                        <input type="text" value="[#LEVEL_MAX#]" class="form-control input-sm" readonly>
+                    <td width="10%" class="vcenter">&lt;</td>
+                    <td width="25%">
+                        <input type="number" name="level_low" value="[#LEVEL_LOW#]" min="0" class="form-control level-control">
                     </td>
                 </tr>
                 <tr>
-                    <th width="15%" class="vcenter"><#LANG_NE_PRIORITY#></th>
-                    <td width="15%" colspan="3"><span class="label label-danger"><#LANG_NE_PRIORITY_HIGHEST#></span></td>
-                    <td width="15%" colspan="3"><span class="label label-warning"><#LANG_NE_PRIORITY_HIGH#></span></td>
-                    <td width="15%" colspan="3"><span class="label label-info"><#LANG_NE_PRIORITY_NORMAL#></span></td>
-                    <td width="15%" colspan="3"><span class="label label-default"><#LANG_NE_PRIORITY_LOW#></span></td>
-                    <td width="15%" colspan="3"><span class="label label-default"><#LANG_NE_PRIORITY_LOWEST#></span></td>
-                    <td width="10%"></td>
+                    <td>
+                        <input type="number" name="level_low" value="[#LEVEL_LOW#]" min="0" class="form-control level-control">
+                    </td>
+                    <td width="10%" class="vcenter">&leq;</td>
+                    <td class="vcenter">
+                        <span class="label label-default"><#LANG_NE_PRIORITY_LOW#></span>
+                    </td>
+                    <td width="10%" class="vcenter">&lt;</td>
+                    <td>
+                        <input type="number" name="level_normal" value="[#LEVEL_NORMAL#]" min="0" class="form-control level-control">
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">
+                        <input type="number" name="level_normal" value="[#LEVEL_NORMAL#]" min="0" class="form-control level-control">
+                    </td>
+                    <td width="10%" class="vcenter">&leq;</td>
+                    <td class="vcenter">
+                        <span class="label label-info"><#LANG_NE_PRIORITY_NORMAL#></span>
+                    </td>
+                    <td width="10%" class="vcenter">&lt;</td>
+                    <td width="25%">
+                        <input type="number" name="level_high" value="[#LEVEL_HIGH#]" min="0" class="form-control level-control">
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">
+                        <input type="number" name="level_high" value="[#LEVEL_HIGH#]" min="0" class="form-control level-control">
+                    </td>
+                    <td width="10%" class="vcenter">&leq;</td>
+                    <td class="vcenter">
+                        <span class="label label-warning"><#LANG_NE_PRIORITY_HIGH#></span>
+                    </td>
+                    <td width="10%" class="vcenter">&lt;</td>
+                    <td width="25%">
+                        <input type="number" name="level_highest" value="[#LEVEL_HIGHEST#]" min="0" class="form-control level-control">
+                    </td>
+                </tr>
+                <tr>
+                    <td width="25%">
+                        <input type="number" name="level_highest" value="[#LEVEL_HIGHEST#]" min="0" class="form-control level-control">
+                    </td>
+                    <td width="10%" class="vcenter">&leq;</td>
+                    <td class="vcenter">
+                        <span class="label label-danger"><#LANG_NE_PRIORITY_HIGHEST#></span>
+                    </td>
+                    <td width="10%" class="vcenter">&lt;</td>
+                    <td width="25%">
+                        <input type="text" value="&infin;" class="form-control" readonly>
+                    </td>
                 </tr>
             </table>
         </div>
     </div>
+
     <div class="form-actions">
         <button type="submit" name="ne_action" value="settings" class="btn btn-primary"><#LANG_NE_ACTION_SAVE#></button>
         <input type="hidden" name="view_mode" value="">
     </div>
+
 </form>

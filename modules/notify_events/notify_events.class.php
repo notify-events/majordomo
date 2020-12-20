@@ -9,7 +9,7 @@ use notify_events\Message;
  * @package project
  * @author Notify.Events
  * @copyright https://notify.events
- * @version 0.1
+ * @version 0.2
  *
  * Class notify_events
  */
@@ -97,8 +97,6 @@ class notify_events extends module
      */
     function run()
     {
-        global $session;
-
         $out = array();
 
         if ($this->action == 'admin') {
@@ -127,6 +125,10 @@ class notify_events extends module
         $this->result = $parser->result;
     }
 
+    /**
+     * @param string $type
+     * @param string $message
+     */
     function alert($type, $message)
     {
         $_SESSION['NE_ALERT'] = [
@@ -135,6 +137,9 @@ class notify_events extends module
         ];
     }
 
+    /**
+     * @param array $out
+     */
     function renderAlert(&$out)
     {
         if (!array_key_exists('NE_ALERT', $_SESSION)) {
@@ -153,6 +158,8 @@ class notify_events extends module
      * Module backend
      *
      * @access public
+     * @param array $out
+     * @throws ErrorException
      */
     function admin(&$out)
     {
@@ -161,17 +168,17 @@ class notify_events extends module
         $this->getConfig();
 
         if ($ne_action == 'settings') {
-            global $token, $event_say_enabled, $level_enabled, $level_high, $level_normal, $level_low, $level_lowest;
+            global $token, $event_say_enabled, $level_enabled, $level_highest, $level_high, $level_normal, $level_low;
 
             $this->config['TOKEN'] = $token;
 
             $this->config['EVENT_SAY_ENABLED'] = (int)($event_say_enabled == 'on');
             $this->config['LEVEL_ENABLED']     = (int)($level_enabled == 'on');
 
-            $this->config['LEVEL_HIGH']   = (int)$level_high;
-            $this->config['LEVEL_NORMAL'] = (int)$level_normal;
-            $this->config['LEVEL_LOW']    = (int)$level_low;
-            $this->config['LEVEL_LOWEST'] = (int)$level_lowest;
+            $this->config['LEVEL_LOW']     = (int)$level_low;
+            $this->config['LEVEL_NORMAL']  = (int)$level_normal;
+            $this->config['LEVEL_HIGH']    = (int)$level_high;
+            $this->config['LEVEL_HIGHEST'] = (int)$level_highest;
 
             if ($this->config['EVENT_SAY_ENABLED']) {
                 subscribeToEvent($this->name, 'SAY');
@@ -202,13 +209,10 @@ class notify_events extends module
         $out['EVENT_SAY_ENABLED'] = array_key_exists('EVENT_SAY_ENABLED', $this->config) ? $this->config['EVENT_SAY_ENABLED'] : 1;
         $out['LEVEL_ENABLED']     = array_key_exists('LEVEL_ENABLED', $this->config)     ? $this->config['LEVEL_ENABLED']     : 0;
 
-        $out['LEVEL_HIGH']   = $this->config['LEVEL_HIGH']   ?: 0;
-        $out['LEVEL_NORMAL'] = $this->config['LEVEL_NORMAL'] ?: 0;
-        $out['LEVEL_LOW']    = $this->config['LEVEL_LOW']    ?: 0;
-        $out['LEVEL_LOWEST'] = $this->config['LEVEL_LOWEST'] ?: 0;
-        $out['LEVEL_MAX']    = getGlobal('minMsgLevel');
-
-        $out['LEVEL_MAX_VALUE'] = getGlobal('minMsgLevel') - 1;
+        $out['LEVEL_LOW']     = $this->config['LEVEL_LOW']     ?: 0;
+        $out['LEVEL_NORMAL']  = $this->config['LEVEL_NORMAL']  ?: 0;
+        $out['LEVEL_HIGH']    = $this->config['LEVEL_HIGH']    ?: 0;
+        $out['LEVEL_HIGHEST'] = $this->config['LEVEL_HIGHEST'] ?: 0;
 
         $this->renderAlert($out);
     }
@@ -226,6 +230,8 @@ class notify_events extends module
     }
 
     /**
+     * @param string       $event
+     * @param string|array $details
      * @throws ErrorException
      */
     function processSubscription($event, $details = '')
@@ -239,13 +245,13 @@ class notify_events extends module
         if ($this->config['LEVEL_ENABLED']) {
             $level = $details['level'];
 
-            if ($level < $this->config['LEVEL_HIGH']) {
+            if ($level >= $this->config['LEVEL_HIGHEST']) {
                 $priority = Message::PRIORITY_HIGHEST;
-            } elseif ($level < $this->config['LEVEL_NORMAL']) {
+            } elseif ($level >= $this->config['LEVEL_HIGH']) {
                 $priority = Message::PRIORITY_HIGH;
-            } elseif ($level < $this->config['LEVEL_LOW']) {
+            } elseif ($level >= $this->config['LEVEL_NORMAL']) {
                 $priority = Message::PRIORITY_NORMAL;
-            } elseif ($level < $this->config['LEVEL_LOWEST']) {
+            } elseif ($level >= $this->config['LEVEL_LOW']) {
                 $priority = Message::PRIORITY_LOW;
             } else {
                 $priority = Message::PRIORITY_LOWEST;
